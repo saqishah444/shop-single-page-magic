@@ -103,7 +103,7 @@ const Index = () => {
                 )}
               </Button>
               <Button className="hidden md:flex">Sign In</Button>
-              
+
               {/* Mobile Menu Button */}
               <Button
                 variant="ghost"
