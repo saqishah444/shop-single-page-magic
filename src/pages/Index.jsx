@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +9,16 @@ import { toast } from "sonner";
 const Index = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const navigate = useNavigate();
+
+  const handleSignIn = () => {
+    const isRegistered = localStorage.getItem("isRegistered") === "true";
+    if (isRegistered) {
+      navigate("/login");
+    } else {
+      navigate("/register");
+    }
+  };
 
   const products = [
     {
@@ -93,7 +104,7 @@ const Index = () => {
                   </Badge>
                 )}
               </Button>
-              <Button className="hidden md:flex">Sign In</Button>
+              <Button className="hidden md:flex" onClick={handleSignIn}>Sign In</Button>
 
               {/* Mobile Menu Button */}
               <Button
@@ -115,7 +126,7 @@ const Index = () => {
               <a href="#products" className="text-sm font-medium text-foreground hover:text-primary transition-colors">Products</a>
               <a href="#" className="text-sm font-medium text-foreground hover:text-primary transition-colors">Categories</a>
               <a href="#" className="text-sm font-medium text-foreground hover:text-primary transition-colors">About</a>
-              <Button className="w-full mt-2">Sign In</Button>
+              <Button className="w-full mt-2" onClick={handleSignIn}>Sign In</Button>
             </nav>
           )}
         </div>
