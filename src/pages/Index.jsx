@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,6 +9,19 @@ import { toast } from "sonner";
 const Index = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => localStorage.getItem("isLoggedIn") === "true");
+
+  useEffect(() => {
+    const onStorage = (e) => {
+      if (e.key === "isLoggedIn") {
+        setIsLoggedIn(e.newValue === "true");
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    // also ensure state sync on mount
+    setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
   const navigate = useNavigate();
 
   const handleSignIn = () => {
@@ -18,6 +31,13 @@ const Index = () => {
     } else {
       navigate("/register");
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("isLoggedIn");
+    setIsLoggedIn(false);
+    // optional: keep registration flag
+    navigate("/");
   };
 
   const products = [
@@ -104,7 +124,11 @@ const Index = () => {
                   </Badge>
                 )}
               </Button>
-              <Button className="hidden md:flex" onClick={handleSignIn}>Sign In</Button>
+              {isLoggedIn ? (
+                <Button className="hidden md:flex" onClick={handleLogout}>Logout</Button>
+              ) : (
+                <Button className="hidden md:flex" onClick={handleSignIn}>Sign In</Button>
+              )}
 
               {/* Mobile Menu Button */}
               <Button
@@ -126,7 +150,11 @@ const Index = () => {
               <a href="#products" className="text-sm font-medium text-foreground hover:text-primary transition-colors">Products</a>
               <a href="#" className="text-sm font-medium text-foreground hover:text-primary transition-colors">Categories</a>
               <a href="#" className="text-sm font-medium text-foreground hover:text-primary transition-colors">About</a>
-              <Button className="w-full mt-2" onClick={handleSignIn}>Sign In</Button>
+              {isLoggedIn ? (
+                <Button className="w-full mt-2" onClick={handleLogout}>Logout</Button>
+              ) : (
+                <Button className="w-full mt-2" onClick={handleSignIn}>Sign In</Button>
+              )}
             </nav>
           )}
         </div>

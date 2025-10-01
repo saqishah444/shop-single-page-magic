@@ -16,8 +16,9 @@ const Login = () => {
       return;
     }
 
-    // For demo purposes, just navigate to home
-    navigate("/");
+  // For demo purposes, set logged in flag and navigate to home
+  localStorage.setItem("isLoggedIn", "true");
+  navigate("/");
   };
 
   return (
